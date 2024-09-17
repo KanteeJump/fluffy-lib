@@ -1,6 +1,6 @@
 **FluffyLib**
 
-> A simple library for creating databases and handling connections.
+> A simple library for creating databases sqlite and handling connections.
 
 ## Installation
 
