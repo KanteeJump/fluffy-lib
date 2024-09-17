@@ -1,0 +1,15 @@
+{
+    "name": "weed/fluffy-lib",
+    "autoload": {
+        "psr-4": {
+            "kante\\fluffylib\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "KanteeJump",
+            "email": "weedjump8@gmail.com"
+        }
+    ],
+    "require": {}
+}
