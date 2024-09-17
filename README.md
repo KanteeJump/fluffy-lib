@@ -59,3 +59,22 @@ $handler->dropTable("users");
 
 FluffyLogger::info("Table dropped successfully");
 ```
+
+### Selecting data
+
+```php
+<?php
+
+require_once 'vendor/autoload.php';
+
+use kante\fluffylib\ConnectionStorage;
+use kante\fluffylib\logger\FluffyLogger;
+
+$storage = new ConnectionStorage("db.sqlite");
+$handler = $storage->getHandler();
+
+$handler->select("users", ["id", "name", "age"], ["age > ?"], [29]);
+$handler->select("users", ["id", "name", "age"], ["id > ?"], [1]);
+
+FluffyLogger::info("Data selected successfully");
+```

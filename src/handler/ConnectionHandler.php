@@ -12,40 +12,54 @@ class ConnectionHandler {
     public function createTable(string $table, array $columns): void {
         $columns = implode(", ", $columns);
 
-        try {
-            $statement = $this->storage->getConnection()->prepare("CREATE TABLE IF NOT EXISTS $table ($columns)");
-            $statement->execute();
-
-            FluffyLogger::success("Table $table created successfully");
-        } catch (\Exception $e) {
-            FluffyLogger::error("Error creating table $table: ".$e->getMessage());
-            exit;
-        }
+        $this->execute("CREATE TABLE IF NOT EXISTS $table ($columns)");
+        FluffyLogger::success("table $table created successfully");
     }
 
     public function dropTable(string $table): void {
-        try {
-            $statement = $this->storage->getConnection()->prepare("DROP TABLE $table");
-            $statement->execute();
+        $this->execute("DROP TABLE IF NOT EXISTS $table");
+        FluffyLogger::success("table $table dropped successfully");
+    }
 
-            FluffyLogger::success("Table $table dropped successfully");
+    public function insert(string $table, array $columns, array $values): void {
+        $columns = implode(", ", $columns);
+        $placeholders = implode(", ", array_fill(0, count($values), "?"));
+
+        $this->execute("INSERT INTO $table ($columns) VALUES ($placeholders)", $values);
+        FluffyLogger::success("data inserted successfully");
+    }
+
+    public function select(string $table, array $columns, array $conditions = [], array $values = []): array {
+        $columns = implode(", ", $columns);
+        $conditions = implode(" AND ", $conditions);
+
+        $query = "SELECT $columns FROM $table";
+
+        if(!empty($conditions)){
+            $query .= " WHERE $conditions";
+        }
+
+        FluffyLogger::success("selecting data from $table successfully");
+        return $this->executeFetchAll($query, $values);
+    }
+
+    public function execute(string $query, array $values = []): void {
+        try {
+            $statement = $this->storage->getConnection()->prepare($query);
+            $statement->execute($values);
         } catch (\Exception $e) {
-            FluffyLogger::error("Error dropping table $table: ".$e->getMessage());
+            FluffyLogger::error("Error executing query: ".$e->getMessage());
             exit;
         }
     }
 
-    public function insert(string $table, array $columns, array $values): void {
+    public function executeFetchAll(string $query, array $values = []): array {
         try {
-            $columns = implode(", ", $columns);
-            $placeholders = implode(", ", array_fill(0, count($values), "?"));
-
-            $statement = $this->storage->getConnection()->prepare("INSERT INTO $table ($columns) VALUES ($placeholders)");
+            $statement = $this->storage->getConnection()->prepare($query);
             $statement->execute($values);
-
-            FluffyLogger::success("Data inserted successfully");
+            return $statement->fetchAll();
         } catch (\Exception $e) {
-            FluffyLogger::error("Error inserting data: ".$e->getMessage());
+            FluffyLogger::error("Error executing query: ".$e->getMessage());
             exit;
         }
     }
