@@ -31,11 +31,11 @@ class ConnectionHandler {
 
     public function select(string $table, array $columns, array $conditions = [], array $values = []): array {
         $columns = implode(", ", $columns);
-        $conditions = implode(" AND ", $conditions);
 
         $query = "SELECT $columns FROM $table";
 
         if(!empty($conditions)){
+            $conditions = implode(" AND ", $conditions);
             $query .= " WHERE $conditions";
         }
 
@@ -49,7 +49,6 @@ class ConnectionHandler {
             $statement->execute($values);
         } catch (\Exception $e) {
             FluffyLogger::error("Error executing query: ".$e->getMessage());
-            exit;
         }
     }
 
@@ -60,7 +59,6 @@ class ConnectionHandler {
             return $statement->fetchAll();
         } catch (\Exception $e) {
             FluffyLogger::error("Error executing query: ".$e->getMessage());
-            exit;
         }
     }
 
