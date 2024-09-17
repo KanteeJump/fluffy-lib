@@ -7,17 +7,15 @@
 > in your composer.json write:
 
 ```json
-{
     "require": {
-        "weed/fluffy-lib": "main"
+        "weed/fluffy-lib": "dev-main"
     },
     "repositories": [
         {
             "type": "vcs",
-            "url": "git@https://github.com/KanteeJump/fluffy-lib"
+            "url": "https://github.com/KanteeJump/fluffy-lib"
         }
     ]
-}
 ```
 
 > run `composer update`
