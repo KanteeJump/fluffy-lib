@@ -73,8 +73,9 @@ use kante\fluffylib\logger\FluffyLogger;
 $storage = new ConnectionStorage("db.sqlite");
 $handler = $storage->getHandler();
 
-$handler->select("users", ["id", "name", "age"], ["age > ?"], [29]);
-$handler->select("users", ["id", "name", "age"], ["id > ?"], [1]);
+// returns an array of arrays
+$result = $handler->select("users", ["id", "name", "age"], ["age > ?"], [29]);
+
 
 FluffyLogger::info("Data selected successfully");
 ```
