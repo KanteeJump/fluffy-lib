@@ -1,4 +1,4 @@
-** FluffyLib **
+**FluffyLib**
 
 > A simple library for creating databases and handling connections.
 
